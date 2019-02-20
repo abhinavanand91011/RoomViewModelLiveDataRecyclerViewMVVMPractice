@@ -1,16 +1,13 @@
-package com.example.roomviewmodellivedatarecyclerviewmvvmpractice;
+package com.example.roomviewmodellivedatarecyclerviewmvvmpractice.Database;
 
 import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
-import androidx.room.DatabaseConfiguration;
-import androidx.room.InvalidationTracker;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 
 //this is Rooom Datbase class
@@ -29,14 +26,16 @@ public abstract class NoteDatabase extends RoomDatabase {
         if(noteDatabase== null){
 
             //we can't use new NoteDatabse() cause we are working throgh abstact class
-            noteDatabase= Room.databaseBuilder(context.getApplicationContext(),NoteDatabase.class,"note_databse")
-                    .fallbackToDestructiveMigrationFrom()//when we want to made changes in database structure it will delete the old and make it new)
+            noteDatabase= Room.databaseBuilder(context.getApplicationContext(),NoteDatabase.class,"note_database")
+                    .fallbackToDestructiveMigration()//when we want to made changes in database structure it will delete the old and make it new)
                     .addCallback(roomCallback)
                     .build();
 
         }
         return noteDatabase;
     }
+    // populating the database through some value
+    //using Callback
 
     private static RoomDatabase.Callback roomCallback=new RoomDatabase.Callback(){
 
@@ -52,24 +51,19 @@ public abstract class NoteDatabase extends RoomDatabase {
             super.onOpen(db);
         }
     };
-
-    private static class PopulateDbAsyncTask extends AsyncTask<Void,Void,Void>{
-
+    //but we can't doon the main thread so we are working through async task in background
+    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
         private NoteDao noteDao;
 
-        private PopulateDbAsyncTask(NoteDatabase db){
-
-            this.noteDao=db.noteDao();
+        private PopulateDbAsyncTask(NoteDatabase db) {
+            noteDao = db.noteDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-
-            noteDao.insert(new Note("Title 1","Description1",1));
-
-            noteDao.insert(new Note("Title 2","Description2",2));
-            noteDao.insert(new Note("Title 3","Description3",3));
-
+            noteDao.insert(new Note("Title 1", "Description 1", 1));
+            noteDao.insert(new Note("Title 2", "Description 2", 2));
+            noteDao.insert(new Note("Title 3", "Description 3", 3));
             return null;
         }
     }

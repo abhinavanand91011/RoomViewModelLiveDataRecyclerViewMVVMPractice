@@ -1,10 +1,14 @@
-package com.example.roomviewmodellivedatarecyclerviewmvvmpractice;
+package com.example.roomviewmodellivedatarecyclerviewmvvmpractice.Repository;
 
 // Creating a repository class ,it is simple java class it is not part of architecture
 // it is best practice it provides abstraction b/w different data base sources and rest of database.  ViewModel will work independtly
 
 import android.app.Application;
 import android.os.AsyncTask;
+
+import com.example.roomviewmodellivedatarecyclerviewmvvmpractice.Database.Note;
+import com.example.roomviewmodellivedatarecyclerviewmvvmpractice.Database.NoteDao;
+import com.example.roomviewmodellivedatarecyclerviewmvvmpractice.Database.NoteDatabase;
 
 import java.util.List;
 
@@ -14,10 +18,11 @@ public class NoteRepository {
 
     private NoteDao noteDao;
 
+
     private LiveData<List<Note>>allNotes;
 
 
-    private NoteRepository(Application application){
+    public NoteRepository(Application application){
 
         //Application is a sub class of Context we can use to create database through context
         NoteDatabase database=NoteDatabase.getInstance(application);
@@ -28,17 +33,17 @@ public class NoteRepository {
 
     public void insert(Note note){
 
-        new InsertNoteAsyncTask(noteDao).execute();
+        new InsertNoteAsyncTask(noteDao).execute(note);
     }
     public void update(Note note){
 
-        new UpdateNoteAsyncTask(noteDao).execute();
+        new UpdateNoteAsyncTask(noteDao).execute(note);
 
 
     }
     public void delete(Note note){
 
-        new DeleteNoteAsyncTask(noteDao).execute();
+        new DeleteNoteAsyncTask(noteDao).execute(note);
 
     }
     public void deleteAllNodes(){
@@ -76,7 +81,7 @@ public class NoteRepository {
 
         }
     }
-    private static class UpdateNoteAsyncTask extends AsyncTask<Note , Void, Void>{
+    private static class UpdateNoteAsyncTask extends AsyncTask<Note, Void, Void>{
 
         private NoteDao noteDao;
 

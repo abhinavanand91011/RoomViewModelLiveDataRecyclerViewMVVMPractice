@@ -1,4 +1,4 @@
-package com.example.roomviewmodellivedatarecyclerviewmvvmpractice;
+package com.example.roomviewmodellivedatarecyclerviewmvvmpractice.Database;
 
 //Dao can be either interface or abstract class
 //we just declare the method ,room will genrate code automatically

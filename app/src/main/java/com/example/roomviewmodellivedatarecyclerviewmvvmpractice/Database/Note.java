@@ -1,4 +1,4 @@
-package com.example.roomviewmodellivedatarecyclerviewmvvmpractice;
+package com.example.roomviewmodellivedatarecyclerviewmvvmpractice.Database;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
